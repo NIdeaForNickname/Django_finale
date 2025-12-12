@@ -1,0 +1,58 @@
+{% extends 'forum/base.html' %}
+
+{% block title %}Home - Forum{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h1 class="display-4">Welcome to the Forum</h1>
+        <p class="lead">Explore categories and join discussions</p>
+    </div>
+</div>
+
+<div class="row">
+    {% for category in categories %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    {% if category.icon %}
+                        <img src="{{ category.icon.url }}" alt="{{ category.name }}" class="category-icon me-3">
+                    {% else %}
+                        <img src="{% url '/category_icons/default.png' %}" alt="{{ category.name }}" class="category-icon me-3">
+                    {% endif %}
+                    <div>
+                        <h5 class="card-title mb-1">{{ category.name }}</h5>
+                        <small class="text-muted">
+                            {{ category.created_by.nickname }}
+                        </small>
+                    </div>
+                </div>
+                <p class="card-text">{{ category.description }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{% url 'category_detail' category.pk %}" class="btn btn-primary">
+                        View Posts
+                    </a>
+                    {% if user.is_authenticated and user == category.created_by %}
+                        <a href="{% url 'delete_category' category.pk %}" 
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Are you sure you want to delete this category? All posts and comments will be deleted.')">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    {% endif %}
+                </div>
+                <small class="text-muted d-block mt-2">
+                     {{ category.created_at|date:"M d, Y" }}
+                </small>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-md-12">
+        <div class="alert alert-info text-center">
+            No categories yet
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 

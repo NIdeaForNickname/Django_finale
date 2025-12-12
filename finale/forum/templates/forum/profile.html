@@ -1,0 +1,30 @@
+{% extends 'forum/base.html' %}
+{% block title %}{{ profile_user.nickname }}'s Profile{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <img src="{{ profile_user.avatar.url }}" alt="Avatar" class="avatar-large mb-3">
+                <h3>{{ profile_user.nickname }}</h3>
+                <p class="text-muted">{{ profile_user.first_name }} {{ profile_user.last_name }}</p>
+                {% if user == profile_user %}
+                <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Profile Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Email:</strong> {{ profile_user.email }}</p>
+                <p><strong>Date of Birth:</strong> {{ profile_user.date_of_birth|date:"M d, Y" }}</p>
+                <p><strong>Member Since:</strong> {{ profile_user.date_joined|date:"M d, Y" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
